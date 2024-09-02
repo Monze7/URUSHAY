@@ -20,6 +20,9 @@ const userSchema = new Schema({
         type: Number,
         required: true,
     },
+    dob: {
+        type: Date,
+    },
     salt: {
         type: String,
     },

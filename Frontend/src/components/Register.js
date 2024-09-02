@@ -1,40 +1,72 @@
-// src/components/Register.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Register.css';
 
 const Register = () => {
-  const [fname, setfName] = useState('');
-  const [lname, setlName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
+  const [mobileNumber, setMobileNumber] = useState('');
   const [dob, setDob] = useState('');
   const [password, setPassword] = useState('');
-  const [mobile, setMobile] = useState(''); // New state for mobile number
+  const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Registering:', { fname, lname, email, dob, password, mobile });
-    navigate('/'); // Redirect after successful registration
+    if (password !== confirmPassword) {
+      alert('Passwords do not match');
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:8000/user/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          mobileNumber: mobileNumber,
+          dob: dob,
+          password: password,
+        }),
+      });
+
+      const json = await response.json();
+      console.log("Response from server:", json); // Log the response
+
+      if (json.msg === "success") {
+        alert("Registration successful");
+        localStorage.setItem('token', json.token);
+        navigate("/");
+      } else {
+        alert("Registration failed: " + json.msg);
+      }
+    } catch (error) {
+      console.error("Error during registration:", error);
+      alert("An error occurred during registration. Please try again.");
+    }
   };
 
   return (
     <div className="register-container">
-      <h1>URUSHYA</h1>
       <h2>Register</h2>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="First Name"
-          value={fname}
-          onChange={(e) => setfName(e.target.value)}
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
           required
         />
         <input
           type="text"
           placeholder="Last Name"
-          value={lname}
-          onChange={(e) => setlName(e.target.value)}
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
           required
         />
         <input
@@ -45,24 +77,30 @@ const Register = () => {
           required
         />
         <input
+          type="text"
+          placeholder="Mobile Number"
+          value={mobileNumber}
+          onChange={(e) => setMobileNumber(e.target.value)}
+          required
+        />
+        <input
           type="date"
           placeholder="Date of Birth"
           value={dob}
           onChange={(e) => setDob(e.target.value)}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Mobile Number"
-          value={mobile}
-          onChange={(e) => setMobile(e.target.value)} // New mobile input field
-          required
         />
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Confirm Password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
           required
         />
         <button type="submit">Register</button>
