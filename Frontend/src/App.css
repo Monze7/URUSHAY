@@ -36,3 +36,33 @@
     transform: rotate(360deg);
   }
 }
+
+/* src/App.css */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to right, #007bff, #00d2ff); /* Blue gradient background */
+  color: #333;
+}
+
+.App {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full viewport height */
+}
+
+.title-container {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.title-container h1 {
+  color: #ffffff; /* White color for the title */
+  font-size: 3rem;
+  margin: 0;
+}

@@ -8,33 +8,10 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-    try {
-      const response = await fetch("http://localhost:8000/user/signin", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-        }),
-      });
-
-      const json = await response.json();
-      if (json.msg === "success") {
-        alert("Login successful");
-        localStorage.setItem('token', json.token);
-        navigate("/dashboard"); // Adjust the route as needed
-      } else {
-        alert("Login failed: " + json.msg);
-      }
-    } catch (error) {
-      console.error("Error during login:", error);
-      alert("An error occurred during login. Please try again.");
-    }
+    console.log('Logging in:', { email, password });
+    navigate('/'); // Redirect on successful login
   };
 
   return (
