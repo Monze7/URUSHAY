@@ -4,24 +4,39 @@ import { useNavigate } from 'react-router-dom';
 import './Register.css';
 
 const Register = () => {
+  const [fname, setfName] = useState('');
+  const [lname, setlName] = useState('');
   const [email, setEmail] = useState('');
+  const [dob, setDob] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [mobile, setMobile] = useState(''); // New state for mobile number
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (password !== confirmPassword) {
-      alert('Passwords do not match');
-      return;
-    }
-    console.log('Registering:', { email, password });
+    console.log('Registering:', { fname, lname, email, dob, password, mobile });
+    navigate('/'); // Redirect after successful registration
   };
 
   return (
     <div className="register-container">
+      <h1>URUSHYA</h1>
       <h2>Register</h2>
       <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="First Name"
+          value={fname}
+          onChange={(e) => setfName(e.target.value)}
+          required
+        />
+        <input
+          type="text"
+          placeholder="Last Name"
+          value={lname}
+          onChange={(e) => setlName(e.target.value)}
+          required
+        />
         <input
           type="email"
           placeholder="Email"
@@ -30,17 +45,24 @@ const Register = () => {
           required
         />
         <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          type="date"
+          placeholder="Date of Birth"
+          value={dob}
+          onChange={(e) => setDob(e.target.value)}
+          required
+        />
+        <input
+          type="text"
+          placeholder="Mobile Number"
+          value={mobile}
+          onChange={(e) => setMobile(e.target.value)} // New mobile input field
           required
         />
         <input
           type="password"
-          placeholder="Confirm Password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           required
         />
         <button type="submit">Register</button>
