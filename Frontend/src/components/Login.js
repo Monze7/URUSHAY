@@ -11,10 +11,12 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Logging in:', { email, password });
+    navigate('/'); // Redirect on successful login
   };
 
   return (
     <div className="login-container">
+      <h1>URUSHYA</h1>
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <input
