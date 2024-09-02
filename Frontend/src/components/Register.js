@@ -1,3 +1,4 @@
+// src/components/Register.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Register.css';
@@ -53,6 +54,7 @@ const Register = () => {
 
   return (
     <div className="register-container">
+      <h1>URUSHYA</h1>
       <h2>Register</h2>
       <form onSubmit={handleSubmit}>
         <input
