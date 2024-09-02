@@ -1,0 +1,50 @@
+/* src/components/Dashboard.css */
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background: linear-gradient(to bottom right, #e0f7fa, #0288d1);
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .dashboard-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #0288d1;
+    padding: 10px 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .nav-button {
+    background: transparent;
+    border: 2px solid #fff;
+    color: #fff;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+    border-radius: 5px;
+    margin: 0 5px;
+  }
+  
+  .nav-button:hover,
+  .nav-button.active {
+    background: #fff;
+    color: #0288d1;
+  }
+  
+  .logout-btn {
+    background: #d32f2f;
+    border: none;
+  }
+  
+  .dashboard-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
