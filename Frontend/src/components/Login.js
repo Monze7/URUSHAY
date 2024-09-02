@@ -27,7 +27,7 @@ const Login = () => {
       if (json.msg === "success") {
         alert("Login successful");
         localStorage.setItem('token', json.token);
-        navigate("/dashboard"); // Adjust the route as needed
+        navigate("/dashboard"); // Redirect to Dashboard after successful login
       } else {
         alert("Login failed: " + json.msg);
       }
@@ -39,6 +39,7 @@ const Login = () => {
 
   return (
     <div className="login-container">
+      <h1>URUSHYA</h1>
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <input
