@@ -46,7 +46,7 @@ router.post('/signup', async (req, res) => {
             dob,
             password,
         });
-        return res.status(201).json({ msg: "success ", user: newUser._id, token: req.cookies.token });
+        return res.status(201).json({ msg: "success", user: newUser._id, token: req.cookies.token });
     } catch (err) {
         return res.status(400).json({ error: err.message });
     }
