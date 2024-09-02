@@ -35,7 +35,7 @@ const authMiddleware = async (req, res, next) => {
 };
 
 router.post('/signup', async (req, res) => {
-    const { firstName, lastName, email, aadharNumber, mobileNumber, password } = req.body;
+    const { firstName, lastName, email, aadharNumber, mobileNumber,dob, password } = req.body;
     try {
         const newUser = await User.create({
             firstName,
@@ -43,6 +43,7 @@ router.post('/signup', async (req, res) => {
             email,
             aadharNumber,
             mobileNumber,
+            dob,
             password,
         });
         return res.status(201).json({ msg: "success", user: newUser._id, token: req.cookies.token });
