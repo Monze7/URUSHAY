@@ -81,8 +81,8 @@ export function Signin() {
               <AlertCircle className="h-4 w-4" />
               <p>Your data will be handled securely and in compliance with privacy regulations.</p>
             </div>
-            <Link href="/signup" className="text-blue-600 hover:underline">
-              Don&apos;t have an account? <b>Sign up here</b>
+            <Link href="/signup">
+              <a className="text-blue-600 hover:underline">Don&apos;t have an account? <b>Sign up here</b> </a>
             </Link>
           </CardFooter>
         </Card>

@@ -123,7 +123,7 @@ export function Signup() {
               <p>Your data will be handled securely and in compliance with privacy regulations.</p>
             </div>
             <div className="text-sm text-blue-600">
-              Already have an account? <b><Link href="/signin" className="text-blue-800 underline">Sign in here</Link>.</b>
+              Already have an account? <b><Link href="/signin"><a className="text-blue-800 underline">Sign in here</a></Link>.</b>
             </div>
           </CardFooter>
         </Card>
