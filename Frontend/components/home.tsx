@@ -104,15 +104,11 @@ export default function Component() {
           transition={{ delay: 0.8 }}
           className="flex flex-col sm:flex-row justify-center gap-4"
         >
-          <Link href="/signup">
-            <a className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 text-lg rounded">
-              Signup
-            </a>
+          <Link href="/signup" className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 text-lg rounded">
+            Signup
           </Link>
-          <Link href="/signin">
-            <a className="border border-blue-600 text-blue-600 hover:bg-blue-50 px-6 py-2 text-lg rounded">
-              Signin
-            </a>
+          <Link href="/signin" className="border border-blue-600 text-blue-600 hover:bg-blue-50 px-6 py-2 text-lg rounded">
+            Signin
           </Link>
         </motion.div>
 

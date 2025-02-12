@@ -16,42 +16,86 @@ export function Dashboard() {
     xls: [],
     image: []
   })
-  const [downloadLinks, setDownloadLinks] = useState<string[]>([]);
-  const router = useRouter();
+  const [downloadLinks, setDownloadLinks] = useState<string[]>([])
+  const router = useRouter()
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token')
     if (!token) {
-      router.push('/signin');
+      router.push('/signin')
     }
-  }, [router]);
+  }, [router])
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>, fileType: string) => {
     const uploadedFiles = Array.from(event.target.files || [])
     setFiles(prev => ({ ...prev, [fileType]: [...prev[fileType], ...uploadedFiles] }))
   }
 
+  const getFileNameFromDisposition = (disposition: string | null): string | null => {
+    if (!disposition) return null
+    // Example: Content-Disposition: attachment; filename="processed_file.docx"
+    const fileNameMatch = disposition.match(/filename="?([^"]+)"?/)
+    return fileNameMatch && fileNameMatch[1] ? fileNameMatch[1] : null
+  }
+
   const handleUploadAll = async () => {
-    const formData = new FormData();
+    const formData = new FormData()
     Object.values(files).flat().forEach(file => {
-      formData.append('file', file);
-    });
+      formData.append('file', file)
+    })
 
     try {
       const response = await fetch('http://127.0.0.1:5000/upload', {
         method: 'POST',
-        body: formData,
-      });
+        body: formData
+      })
 
-      if (response.ok) {
-        const data = await response.json();
-        const links = data.files.map((file: string) => `http://127.0.0.1:5000/uploads/${file}`);
-        setDownloadLinks(links);
+      if (!response.ok) {
+        console.error('Error uploading file:', response.statusText)
+        return
+      }
+
+      // Check the Content-Type header to decide how to parse the response
+      const contentType = response.headers.get('Content-Type') || ''
+      if (contentType.toLowerCase().includes('application/json')) {
+        // Handle unexpected JSON response (e.g. error handling).
+        const data = await response.json()
+        console.error('Error:', data.error)
       } else {
-        console.error('Error uploading file:', response.statusText);
+        // Process the response as a binary file.
+        const blob = await response.blob()
+        const url = window.URL.createObjectURL(blob)
+
+        // Try to extract a dynamic filename from the Content-Disposition header.
+        const disposition = response.headers.get('Content-Disposition')
+        let fileName = getFileNameFromDisposition(disposition)
+        if (!fileName) {
+          // Fallback based on content type
+          if (contentType.includes('pdf')) {
+            fileName = 'processed_file.pdf'
+          } else if (contentType.includes('vnd.openxmlformats-officedocument.wordprocessingml.document') || contentType.includes('msword')) {
+            fileName = 'processed_file.doc'
+          } else if (contentType.includes('vnd.openxmlformats-officedocument.spreadsheetml.sheet') || contentType.includes('excel')) {
+            fileName = 'processed_file.xlsx'
+          } else if (contentType.includes('vnd.openxmlformats-officedocument.presentationml.presentation')) {
+            fileName = 'processed_file.ppt'
+          } else {
+            fileName = 'processed_file'
+          }
+        }
+
+        // Create and trigger download.
+        const link = document.createElement('a')
+        link.href = url
+        link.download = fileName
+        document.body.appendChild(link)
+        link.click()
+        link.remove()
+        // Optionally store the link to display a download button:
+        setDownloadLinks([url])
       }
     } catch (error) {
-      console.error('Error uploading file:', error);
+      console.error('Error uploading file:', error)
     }
   }
 
@@ -144,7 +188,12 @@ export function Dashboard() {
 
           <div className="mt-8 flex justify-center">
             {downloadLinks.map((link, index) => (
-              <a key={index} href={link} download className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 text-lg">
+              <a
+                key={index}
+                href={link}
+                download
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 text-lg"
+              >
                 <Download className="mr-2 h-5 w-5" />
                 Download Processed File {index + 1}
               </a>
