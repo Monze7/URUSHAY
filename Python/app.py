@@ -9,9 +9,9 @@ from io import BytesIO
 
 app = Flask(__name__)
 CORS(app, resources={
-    r"/upload": {
-        "origins": "http://localhost:3000",
-        "methods": ["POST"],
+    r"/*": {  # Allow CORS for all routes
+        "origins": ["http://localhost:3000", "https://urushay.vercel.app"],  # Add your frontend URLs
+        "methods": ["GET", "POST"],  # Allow both GET and POST methods
         "allow_headers": ["Content-Type"],
         "expose_headers": ["Content-Disposition", "Content-Length"]
     }
@@ -20,6 +20,14 @@ app.config['UPLOAD_FOLDER'] = 'uploads/'
 
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
+
+@app.route('/', methods=['GET'])
+def health_check():
+    return jsonify({
+        'status': 'healthy',
+        'message': 'Server is running'
+    }), 200
+
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
