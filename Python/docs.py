@@ -1,4 +1,4 @@
-import fitz  # PyMuPDF
+import fitz  # PyMuPDF is imported as fitz
 import re
 import docx
 from pptx import Presentation
@@ -27,28 +27,37 @@ def mask_pii_in_text(text):
     return text
 
 def modify_and_encrypt_pdf(input_stream, output_stream, password):
-    """Modified function to work with file streams instead of paths"""
-    # Create a temporary PDF document from the input stream
-    doc = fitz.open(stream=input_stream.read(), filetype="pdf")
-
-    # Mask PII and redact the content
-    for page in doc:
-        blocks = page.get_text("blocks")
-        for block in blocks:
-            block_text = block[4]
-            masked_text = mask_pii_in_text(block_text)
-
-            if masked_text != block_text:
-                page.add_redact_annot(block[:4], fill=(1, 1, 1))
-                page.apply_redactions()
-                page.insert_text((block[0], block[1]), masked_text, fontsize=12)
-
-    # Save the modified and encrypted PDF directly to the output stream
-    doc.save(output_stream, 
-             encryption=fitz.PDF_ENCRYPT_AES_256, 
-             owner_pw=password, 
-             user_pw=password)
-    doc.close()
+    try:
+        # Create a new PDF document from the stream
+        doc = fitz.open(stream=input_stream.read(), filetype="pdf")
+        
+        # Process each page
+        for page in doc:
+            # Process text on each page
+            text = page.get_text()
+            # Mask PII in text if needed
+            masked_text = mask_pii_in_text(text)
+            if text != masked_text:
+                # If text was modified, update the page
+                page.clean_contents()
+                page.insert_text((50, 50), masked_text)  # You may need to adjust coordinates
+        
+        # Save with encryption
+        doc.save(
+            output_stream,
+            encryption=fitz.PDF_ENCRYPT_AES_256,  # Use AES 256-bit encryption
+            user_pw=password,  # User password
+            owner_pw=password,  # Owner password
+            permissions=int(
+                fitz.PDF_PERM_PRINT |  # Allow printing
+                fitz.PDF_PERM_COPY    # Allow copying text
+            )
+        )
+        doc.close()
+        return True
+    except Exception as e:
+        print(f"Error in modify_and_encrypt_pdf: {str(e)}")
+        raise
 
 def modify_docx(input_stream, output_stream):
     doc = docx.Document(input_stream)
