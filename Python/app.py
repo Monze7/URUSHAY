@@ -10,7 +10,7 @@ from io import BytesIO
 app = Flask(__name__)
 CORS(app, resources={
     r"/*": {  # Allow CORS for all routes
-        "origins": ["http://localhost:3000", "https://urushay.vercel.app"],  # Add your frontend URLs
+        "origins": "*",  # Allow all origins
         "methods": ["GET", "POST"],  # Allow both GET and POST methods
         "allow_headers": ["Content-Type"],
         "expose_headers": ["Content-Disposition", "Content-Length"]
